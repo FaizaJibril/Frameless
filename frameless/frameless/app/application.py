@@ -2,6 +2,7 @@
 # mypy: ignore-errors
 import logging.config
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from .api import api_router
@@ -43,6 +44,9 @@ def create_application() -> FastAPI:
 
     # add defined routers
     application.include_router(api_router, prefix=settings.API_STR)
+
+    # Mount static files
+    application.mount("/static", StaticFiles(directory="frameless/static"), name="static")
 
     # event handler
     application.add_event_handler("startup", startup_handler)
